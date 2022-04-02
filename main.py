@@ -77,7 +77,7 @@ def bbb(message):
 @bot.message_handler(commands=['com'])
 def d(message):
     bot.send_message(message.chat.id,'/start - начало')
-    bot.send_message(message.chat.id,'/valuta - Курс валюты')
+    bot.send_message(message.chat.id,'/info - информация')
     bot.send_message(message.chat.id, '/Raspisanie - расписание квантумов')
 @bot.message_handler(commands=['Raspisanie'])
 def b(message):
