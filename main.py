@@ -51,33 +51,11 @@ def info(message):
     item12=types.KeyboardButton('Как связаться')
     markup.add(item9,item10,item11,item12)
     bot.send_message(message.chat.id, 'Выберите, что Вас интересует', reply_markup=markup)
-@bot.message_handler(content_types='text')
-def bbb(message):
-    if message.text=="Направления":
-        bot.send_message(message.chat.id, 'Vr/Ar - моделирование 3D объектов и миров. Программирование и создание собственных Vr и Ar приложений')
-        bot.send_message(message.chat.id,'Хайтек - работа с 3D принтером, станком с ЧПУ, моделирование в 2D и 3D, лазерные технологии')
-        bot.send_message(message.chat.id, 'Наноквантум - изучение материалов на микро и наноуровнях с помощью современных микроскопов и другого оборудования')
-        bot.send_message(message.chat.id, 'Геоквантум - изучение поверхности Земли, картостроение, создание систем навигации')
-        bot.send_message(message.chat.id, 'Аэроквантум - беспилотные летательные аппараты. Проектирование, запуск, сборка')
-        bot.send_message(message.chat.id, 'Промробоквантум - конструирование и программирование роботов')
-        bot.send_message(message.chat.id, 'Также проходят занятия по английскому языку, шахматам и математике')
-    elif message.text =='Адрес':
-        bot.send_message(message.chat.id, 'Иркутский переулок 2')
-        bot.send_location(message.chat.id, 57.81219, 28.35942)
-    elif message.text == 'ЧаВо':
-        bot.send_message(message.chat.id, 'Бесплатное ли обучение? Да, обучение абсолютно бесплатно :)')
-        bot.send_message(message.chat.id, 'Со скольки лет можно ходить? На шахматы можно записаться с 6 лет, а на все остальные направления с 12.')
-        bot.send_message(message.chat.id, 'Договор! Обязательно не забудьте взять, заполнить и принести договор на обучений!')
-        bot.send_message(message.chat.id, 'Ссылка на договор : https://vk.com/doc-161543134_610773790?hash=56f7e51ec0fa6ab503&dl=5798c9a12377ee7be6')
-    elif message.text == 'Как связаться':
-        bot.send_message(message.chat.id, 'Тел. +7(8112)79-70-79')
-        bot.send_message(message.chat.id, 'https://vk.com/kvantoriumpskov')
-        bot.send_message(message.chat.id, 'https://vk.com/golikovaao')
-        bot.send_message(message.chat.id, 'kvantoriumpskov@gmail.com')
+
 @bot.message_handler(commands=['com'])
 def d(message):
     bot.send_message(message.chat.id,'/start - начало')
-    bot.send_message(message.chat.id,'/info - информация')
+    bot.send_message(message.chat.id,'/info - инфо')
     bot.send_message(message.chat.id, '/Raspisanie - расписание квантумов')
 @bot.message_handler(commands=['Raspisanie'])
 def b(message):
@@ -112,4 +90,26 @@ def aaa(message):
 
         bot.send_photo(message.chat.id, vr_fin2)
 
-bot.infinity_polling()
+    if message.text=="Направления":
+        bot.send_message(message.chat.id, 'Vr/Ar - моделирование 3D объектов и миров. Программирование и создание собственных Vr и Ar приложений')
+        bot.send_message(message.chat.id,'Хайтек - работа с 3D принтером, станком с ЧПУ, моделирование в 2D и 3D, лазерные технологии')
+        bot.send_message(message.chat.id, 'Наноквантум - изучение материалов на микро и наноуровнях с помощью современных микроскопов и другого оборудования')
+        bot.send_message(message.chat.id, 'Геоквантум - изучение поверхности Земли, картостроение, создание систем навигации')
+        bot.send_message(message.chat.id, 'Аэроквантум - беспилотные летательные аппараты. Проектирование, запуск, сборка')
+        bot.send_message(message.chat.id, 'Промробоквантум - конструирование и программирование роботов')
+        bot.send_message(message.chat.id, 'Также проходят занятия по английскому языку, шахматам и математике')
+    elif message.text =='Адрес':
+        bot.send_message(message.chat.id, 'Иркутский переулок 2')
+        bot.send_location(message.chat.id, 57.81219, 28.35942)
+    elif message.text == 'ЧаВо':
+        bot.send_message(message.chat.id, 'Бесплатное ли обучение? Да, обучение абсолютно бесплатно :)')
+        bot.send_message(message.chat.id, 'Со скольки лет можно ходить? На шахматы можно записаться с 6 лет, а на все остальные направления с 12.')
+        bot.send_message(message.chat.id, 'Договор! Обязательно не забудьте взять, заполнить и принести договор на обучений!')
+        bot.send_message(message.chat.id, 'Ссылка на договор : https://vk.com/doc-161543134_610773790?hash=56f7e51ec0fa6ab503&dl=5798c9a12377ee7be6')
+    elif message.text == 'Как связаться':
+        bot.send_message(message.chat.id, 'Тел. +7(8112)79-70-79')
+        bot.send_message(message.chat.id, 'https://vk.com/kvantoriumpskov')
+        bot.send_message(message.chat.id, 'https://vk.com/golikovaao')
+        bot.send_message(message.chat.id, 'kvantoriumpskov@gmail.com')
+
+bot.infinity_polling()()
