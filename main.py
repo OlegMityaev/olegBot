@@ -6,10 +6,8 @@ import speech_recognition as sr
 import os
 import pyttsx3
 import time
-import random
 from pydub import AudioSegment
 
-print(os.getcwd() + "\\ffmpeg\\bin\\ffmpeg.exe")
 AudioSegment.converter = os.getcwd() + "\\ffmpeg\\bin\\ffmpeg.exe"
 AudioSegment.ffmpeg = os.getcwd() + "\\ffmpeg\\bin\\ffmpeg.exe"
 AudioSegment.ffprobe = os.getcwd() + "\\ffmpeg\\bin\\ffprobe.exe"
@@ -22,6 +20,7 @@ for voice in voices:
 
 RU_VOICE_ID = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_RU-RU_IRINA_11.0"
 text_to_speach.setProperty('voice', RU_VOICE_ID)
+
 def get_kartinka(napr):
     global vr_fin2
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"}
@@ -56,7 +55,7 @@ def get_kartinka(napr):
     vr_fin2 = vr_fin1.replace(vr3, '')
     return vr_fin2
 
-token = '5114669449:AAFBSdAX9N0dhcs71r6U4oICP1_AdBriWVo'
+token = '5396396730:AAHtckjLxFRDfAqjEVREUXaY_OGASGeHZIM'
 bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -66,7 +65,15 @@ def start(message):
 
 @bot.message_handler(commands=['info'])
 def info(message):
-    bot.send_message(message.chat.id, 'Здравствуйте! Меня зовут Олег и я Ваш личный гид по Кванториуму!')
+    mid = bot.send_message(message.chat.id, 'Здравствуйте! Меня зовут Ирина и я Ваш личный гид по Кванториуму!')
+    btext = mid.text.lower()
+    src = str(message.chat.id) + str(mid.message_id - 1) + '_answer.oga'
+    text_to_speach.save_to_file(btext[:], src)
+    text_to_speach.runAndWait()
+    time.sleep(1)
+    voice = open(src, 'rb')
+    bot.send_audio(message.chat.id, voice)
+
     markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
     item9 = types.KeyboardButton('Направления')
     item10=types.KeyboardButton('Адрес')
@@ -94,8 +101,27 @@ def b(message):
     markup.add(item3,item4,item5,item6,item7,item8)
     bot.send_message(message.chat.id, 'Выберите интересующий квантум', reply_markup=markup)
 
-@bot.message_handler(content_types='text')
+@bot.message_handler(commands=['dialog'])
+def dialog(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item13 = types.KeyboardButton('Представься')
+    item14 = types.KeyboardButton('Возможности')
+    item15 = types.KeyboardButton('Аня есть')
+    item16 = types.KeyboardButton('ББ')
+    markup.add(item13, item14, item15, item16)
+    bot.send_message(message.chat.id, 'Выберите, что Вас интересует', reply_markup=markup)
+
+
+@bot.message_handler(content_types=['text'])
 def aaa(message):
+    def golos(mid):
+        btext = mid.text.lower()
+        src = str(message.chat.id) + str(mid.message_id - 1) + '_answer.oga'
+        text_to_speach.save_to_file(btext[:], src)
+        text_to_speach.runAndWait()
+        time.sleep(1)
+        voice = open(src, 'rb')
+        bot.send_audio(message.chat.id, voice)
     if message.text=='Vr/Ar':
         get_kartinka('vr')
         bot.send_photo(message.chat.id, vr_fin2)
@@ -116,22 +142,33 @@ def aaa(message):
 
         bot.send_photo(message.chat.id, vr_fin2)
 
+    if message.text == 'Представься':
+        golos(bot.send_message(message.chat.id, 'Здравствуйте! Меня зовут Ирина'))
+    elif message.text == "Возможности":
+        golos(bot.send_message(message.chat.id, 'Я умею выдавать расписание квантумов, которые я успешно выгрузила с официального сайта Кванториума. Могу скинуть геолокацию кванториума. И выдавать полезную информацию'))
+    elif message.text == 'Аня есть':
+        golos(bot.send_message(message.chat.id, 'Но для этого есть Аня'))
+    elif message.text == 'ББ':
+        golos(bot.send_message(message.chat.id, 'До свидания'))
+
     if message.text=="Направления":
-        bot.send_message(message.chat.id, 'Vr/Ar - моделирование 3D объектов и миров. Программирование и создание собственных Vr и Ar приложений')
-        bot.send_message(message.chat.id,'Хайтек - работа с 3D принтером, станком с ЧПУ, моделирование в 2D и 3D, лазерные технологии')
-        bot.send_message(message.chat.id, 'Наноквантум - изучение материалов на микро и наноуровнях с помощью современных микроскопов и другого оборудования')
-        bot.send_message(message.chat.id, 'Геоквантум - изучение поверхности Земли, картостроение, создание систем навигации')
-        bot.send_message(message.chat.id, 'Аэроквантум - беспилотные летательные аппараты. Проектирование, запуск, сборка')
-        bot.send_message(message.chat.id, 'Промробоквантум - конструирование и программирование роботов')
-        bot.send_message(message.chat.id, 'Также проходят занятия по английскому языку, шахматам и математике')
+
+        golos(bot.send_message(message.chat.id, 'Vr/Ar - моделирование 3D объектов и миров. Программирование и создание собственных Vr и Ar приложений'))
+        golos(bot.send_message(message.chat.id,'Хайтек - работа с 3D принтером, станком с ЧПУ, моделирование в 2D и 3D, лазерные технологии'))
+
+        golos(bot.send_message(message.chat.id, 'Наноквантум - изучение материалов на микро и наноуровнях с помощью современных микроскопов и другого оборудования'))
+        golos(bot.send_message(message.chat.id, 'Геоквантум - изучение поверхности Земли, картостроение, создание систем навигации'))
+        golos(bot.send_message(message.chat.id, 'Аэроквантум - беспилотные летательные аппараты. Проектирование, запуск, сборка'))
+        golos(bot.send_message(message.chat.id, 'Промробоквантум - конструирование и программирование роботов'))
+        golos(bot.send_message(message.chat.id, 'Также проходят занятия по английскому языку, шахматам и математике'))
     elif message.text =='Адрес':
         bot.send_message(message.chat.id, 'Иркутский переулок 2')
         bot.send_location(message.chat.id, 57.81219, 28.35942)
     elif message.text == 'ЧаВо':
-        bot.send_message(message.chat.id, 'Бесплатное ли обучение? Да, обучение абсолютно бесплатно :)')
-        bot.send_message(message.chat.id, 'Со скольки лет можно ходить? На шахматы можно записаться с 6 лет, а на все остальные направления с 12.')
-        bot.send_message(message.chat.id, 'Договор! Обязательно не забудьте взять, заполнить и принести договор на обучений!')
-        bot.send_message(message.chat.id, 'Ссылка на договор : https://vk.com/doc-161543134_610773790?hash=56f7e51ec0fa6ab503&dl=5798c9a12377ee7be6')
+        golos(bot.send_message(message.chat.id, 'Бесплатное ли обучение? Да, обучение абсолютно бесплатно :)'))
+        golos(bot.send_message(message.chat.id, 'Со скольки лет можно ходить? На шахматы можно записаться с 6 лет, а на все остальные направления с 12.'))
+        golos(bot.send_message(message.chat.id, 'Договор! Обязательно не забудьте взять, заполнить и принести договор на обучений!'))
+        golos(bot.send_message(message.chat.id, 'Ссылка на договор : https://vk.com/doc-161543134_610773790?hash=56f7e51ec0fa6ab503&dl=5798c9a12377ee7be6'))
     elif message.text == 'Как связаться':
         bot.send_message(message.chat.id, 'Тел. +7(8112)79-70-79')
         bot.send_message(message.chat.id, 'https://vk.com/kvantoriumpskov')
@@ -170,7 +207,6 @@ def aaa(message):
         print(src)
         text_to_speach.save_to_file(btext[:], src)
         text_to_speach.runAndWait()
-        time.sleep(1)
         voice = open(src, 'rb')
         bot.send_audio(message.chat.id, voice)
         bot.send_photo(message.chat.id, 'https://avatars.mds.yandex.net/i?id=3408794366b2cb0e99df8719c128b8cd-5173372-images-thumbs&n=13')
@@ -202,27 +238,6 @@ def bot_messages(message):
             time.sleep(1)
             voice = open(file_info.file_path[:6]+'answer'+ file_info.file_path[5:], 'rb')
             bot.send_audio(message.chat.id, voice)
-        elif 'повтори' in text and text.split(' ')[0] == 'повтори':
-            bot.send_message(message.chat.id, 'Повторяю: ' + text[7:])
-        elif 'сайт' == text:
-            bot.send_message(message.chat.id, 'Сайт NTA: https://newtechaudit.ru/')
-        elif 'своё имя' in text or 'как тебя зовут' in text or 'назови себя' in text:
-            bot.send_message(message.chat.id,'Меня зовут Bot!')
-        elif 'случайное число' in text and 'от' in text and 'до' in text:
-            ot=text.find('от')
-            do=text.find('до')
-            f_num=int(text[ot+3:do-1])
-            l_num=int(text[do+3:])
-            bot.send_message(message.chat.id, str(random.randint(f_num, l_num)))
-        elif 'random ' in text:
-            if len(text.split(' ')) == 2:
-                bot.send_message(message.chat.id, str(random.randint(0, int(text.split(' ')[1]))))
-            elif len(text.split(' ')) == 3:
-                bot.send_message(message.chat.id, str(random.randint(int(text.split(' ')[1]), int(text.split(' ')[2]))))
-            else:
-                bot.send_message(message.chat.id, 'Неверный формат. Попробуйте: "rand X" или "rand X Y"')
-        elif 'пока' == text or 'до свидания' == text:
-            bot.send_message(message.chat.id, 'До свидания!')
     else:
         bot.send_message(message.chat.id, 'Не понял команду :(')
 
